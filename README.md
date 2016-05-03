@@ -1,5 +1,5 @@
 # digitalocean-terraform
-Terraform scripts for digitalocean.com
+Terraform scripts for digitalocean.com, based on [packet-terraform](https://github.com/mesosphere/packet-terraform)
 
 ### This repo holds [Terraform](https://www.terraform.io/) scripts to create a
 1, 3, or 5 master DCOS cluster on the [digitalocean.com](https://digitalocean.com/)
