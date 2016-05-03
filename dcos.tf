@@ -116,7 +116,7 @@ resource "digitalocean_droplet" "dcos_public_agent" {
   name = "${format("${var.dcos_cluster_name}-public-agent-%02d", count.index)}"
   depends_on = ["digitalocean_droplet.dcos_bootstrap"]
   image = "coreos-stable"
-  size             = "${var.size}"
+  size          = "${var.size}"
   user_data     = "#cloud-config\n\nssh_authorized_keys:\n  - \"${file("${var.dcos_ssh_public_key_path}")}\"\n"
   region      = "${var.region}"
   private_networking = true
