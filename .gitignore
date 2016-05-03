@@ -6,3 +6,6 @@
 !sample.terraform.tfvars
 !vars.tf
 !README.md
+terraform.tfvars
+do-key
+do-key.pub

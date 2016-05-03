@@ -1,35 +1,25 @@
 
-variable "packet_api_key" {
-  description = "Your packet API key"
+variable "digitalocean_token" {
+  description = "Your DigitalOcean API key"
 }
 
-variable "packet_project_id" {
-  description = "Packet Project ID"
+variable "ssh_key_fingerprint" {
+  description = "Your SSH Public Key"
 }
 
-variable "packet_facility" {
-  description = "Packet facility: US East(ewr1), US West(sjc1), or EU(ams1). Default: sjc1"
-  default = "sjc1"
+variable "region" {
+  description = "DigitalOcean Region"
+  default = "NYC2"
 }
 
-variable "packet_agent_type" {
-  description = "Instance type of Agent"
-  defaut = "baremetal_0"
-}
-
-variable "packet_master_type" {
-  description = "Instance type of Master"
-  default = "baremetal_0"
-}
-
-variable "packet_boot_type" {
-  description = "Instance type of bootstrap unit"
-  default = "baremetal_0"
+variable "size" {
+  description = "Droplet Size"
+  default = "4GB"
 }
 
 variable "dcos_cluster_name" {
   description = "Name of your cluster. Alpha-numeric and hyphens only, please."
-  default = "packet-dcos"
+  default = "digitalocean-dcos"
 } 
 
 variable "dcos_master_count" {
@@ -49,7 +39,7 @@ variable "dcos_public_agent_count" {
 
 variable "dcos_ssh_public_key_path" {
   description = "Path to your public SSH key path"
-  default = "./packet-key.pub"
+  default = "./do-key.pub"
 }
 
 variable "dcos_installer_url" {
@@ -59,5 +49,5 @@ variable "dcos_installer_url" {
 
 variable "dcos_ssh_key_path" {
   description = "Path to your private SSH key for the project"
-  default = "./packet-key"
+  default = "./do-key"
 }

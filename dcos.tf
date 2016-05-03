@@ -1,25 +1,25 @@
-provider "packet" {
-  auth_token = "${var.packet_api_key}"
+provider "digitalocean" {
+  token = "${var.digitalocean_token}"
 }
 
-resource "packet_device" "dcos_bootstrap" {
-  hostname = "${format("${var.dcos_cluster_name}-bootstrap-%02d", count.index)}"
+resource "digitalocean_droplet" "dcos_bootstrap" {
+  name = "${format("${var.dcos_cluster_name}-bootstrap-%02d", count.index)}"
 
-  operating_system = "coreos_stable"
-  plan             = "${var.packet_boot_type}"
+  image = "coreos-stable"
+  size             = "${var.size}"
+    ssh_keys = ["${var.ssh_key_fingerprint}"]
   connection {
     user = "core"
     private_key = "${var.dcos_ssh_key_path}"
   }
   user_data     = "#cloud-config\n\nssh_authorized_keys:\n  - \"${file("${var.dcos_ssh_public_key_path}")}\"\n"
-  facility      = "${var.packet_facility}"
-  project_id    = "${var.packet_project_id}"
-  billing_cycle = "hourly"
+  region      = "${var.region}"
+
   provisioner "local-exec" {
     command = "rm -rf ./do-install.sh"
   }
   provisioner "local-exec" {
-    command = "echo BOOTSTRAP=\"${packet_device.dcos_bootstrap.network.0.address}\" >> ips.txt"
+    command = "echo BOOTSTRAP=\"${digitalocean_droplet.dcos_bootstrap.ipv4_address}\" >> ips.txt"
   }
   provisioner "local-exec" {
     command = "echo CLUSTER_NAME=\"${var.dcos_cluster_name}\" >> ips.txt"
@@ -52,16 +52,17 @@ resource "packet_device" "dcos_bootstrap" {
   }
 }
 
-resource "packet_device" "dcos_master" {
-  hostname = "${format("${var.dcos_cluster_name}-master-%02d", count.index)}"
-  operating_system = "coreos_stable"
-  plan             = "${var.packet_master_type}"
+resource "digitalocean_droplet" "dcos_master" {
+  name = "${format("${var.dcos_cluster_name}-master-%02d", count.index)}"
+  image = "coreos-stable"
+  size             = "${var.size}"
+  private_networking = true
+  ssh_keys = ["${var.ssh_key_fingerprint}"]
 
   count         = "${var.dcos_master_count}"
   user_data     = "#cloud-config\n\nssh_authorized_keys:\n  - \"${file("${var.dcos_ssh_public_key_path}")}\"\n"
-  facility      = "${var.packet_facility}"
-  project_id    = "${var.packet_project_id}"
-  billing_cycle = "hourly"
+  region      = "${var.region}"
+
   connection {
     user = "core"
     private_key = "${var.dcos_ssh_key_path}"
@@ -70,7 +71,7 @@ resource "packet_device" "dcos_master" {
     command = "rm -rf ./do-install.sh"
   }
   provisioner "local-exec" {
-    command = "echo ${format("MASTER_%02d", count.index)}=\"${self.network.0.address}\" >> ips.txt"
+    command = "echo ${format("MASTER_%02d", count.index)}=\"${self.ipv4_address}\" >> ips.txt"
   }
   provisioner "local-exec" {
     command = "while [ ! -f ./do-install.sh ]; do sleep 1; done"
@@ -84,17 +85,16 @@ resource "packet_device" "dcos_master" {
   }
 }
 
-resource "packet_device" "dcos_agent" {
-  hostname = "${format("${var.dcos_cluster_name}-agent-%02d", count.index)}"
-  depends_on = ["packet_device.dcos_bootstrap"]
-  operating_system = "coreos_stable"
-  plan             = "${var.packet_agent_type}"
-
+resource "digitalocean_droplet" "dcos_agent" {
+  name = "${format("${var.dcos_cluster_name}-agent-%02d", count.index)}"
+  depends_on = ["digitalocean_droplet.dcos_bootstrap"]
+  image = "coreos-stable"
+  size          = "${var.size}"
   count         = "${var.dcos_agent_count}"
   user_data     = "#cloud-config\n\nssh_authorized_keys:\n  - \"${file("${var.dcos_ssh_public_key_path}")}\"\n"
-  facility      = "${var.packet_facility}"
-  project_id    = "${var.packet_project_id}"
-  billing_cycle = "hourly"  
+  region      = "${var.region}"
+  private_networking = true
+  ssh_keys = ["${var.ssh_key_fingerprint}"]
   connection {
     user = "core"
     private_key = "${var.dcos_ssh_key_path}"
@@ -112,17 +112,15 @@ resource "packet_device" "dcos_agent" {
 }
 
 
-resource "packet_device" "dcos_public_agent" {
-  hostname = "${format("${var.dcos_cluster_name}-public-agent-%02d", count.index)}"
-  depends_on = ["packet_device.dcos_bootstrap"]
-  operating_system = "coreos_stable"
-  plan             = "${var.packet_agent_type}"
-
-  count         = "${var.dcos_public_agent_count}"
+resource "digitalocean_droplet" "dcos_public_agent" {
+  name = "${format("${var.dcos_cluster_name}-public-agent-%02d", count.index)}"
+  depends_on = ["digitalocean_droplet.dcos_bootstrap"]
+  image = "coreos-stable"
+  size             = "${var.size}"
   user_data     = "#cloud-config\n\nssh_authorized_keys:\n  - \"${file("${var.dcos_ssh_public_key_path}")}\"\n"
-  facility      = "${var.packet_facility}"
-  project_id    = "${var.packet_project_id}"
-  billing_cycle = "hourly"  
+  region      = "${var.region}"
+  private_networking = true
+  ssh_keys = ["${var.ssh_key_fingerprint}"]
   connection {
     user = "core"
     private_key = "${var.dcos_ssh_key_path}"
