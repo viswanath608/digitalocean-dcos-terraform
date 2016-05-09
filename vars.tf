@@ -12,8 +12,18 @@ variable "region" {
   default = "NYC2"
 }
 
-variable "size" {
-  description = "Droplet Size"
+variable "agent_size" {
+  description = "DCOS Agent Droplet Size"
+  default = "4GB"
+}
+
+variable "master_size" {
+  description = "DCOS Master Droplet Size"
+  default = "4GB"
+}
+
+variable "boot_size" {
+  description = "DCOS Boot Server Droplet Size"
   default = "4GB"
 }
 

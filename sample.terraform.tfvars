@@ -2,7 +2,11 @@ digitalocean_token = ""
 
 region = "NYC2"
 
-size = "4GB"
+master_size = "4GB"
+
+agent_size = "4GB"
+
+boot_size = "4GB"
 
 dcos_cluster_name = "digitalocean-dcos"
 
