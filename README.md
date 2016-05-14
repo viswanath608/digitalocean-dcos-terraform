@@ -9,13 +9,16 @@ provider.
 
 Clone or download repo.
 
-Generate a `do-key` keypair:
+Generate a `do-key` keypair (with an empty passphrase):
 
 ```bash
-ssh-keygen -t rsa -f ./do-key
+ssh-keygen -t rsa -P '' -f ./do-key
 ```
 
 Copy `sample.terraform.tfvars` to `terraform.tfvars` and insert your variables.
+
+Check [Digital Ocean](https://cloud.digitalocean.com/droplets/new?distro=coreos) to see
+in which regions a coreos-stable cluster can be set-up (e.g. _not_ in ams1 ATM).
 
 Run `terraform apply`
 
