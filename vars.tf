@@ -30,7 +30,7 @@ variable "boot_size" {
 variable "dcos_cluster_name" {
   description = "Name of your cluster. Alpha-numeric and hyphens only, please."
   default = "digitalocean-dcos"
-} 
+}
 
 variable "dcos_master_count" {
   default = "3"
@@ -55,7 +55,7 @@ variable "dcos_ssh_public_key_path" {
 variable "dcos_installer_url" {
   description = "Path to get DCOS"
   default = "https://downloads.dcos.io/dcos/EarlyAccess/dcos_generate_config.sh"
-} 
+}
 
 variable "dcos_ssh_key_path" {
   description = "Path to your private SSH key for the project"
