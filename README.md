@@ -20,6 +20,10 @@ Copy `sample.terraform.tfvars` to `terraform.tfvars` and insert your variables.
 Check [Digital Ocean](https://cloud.digitalocean.com/droplets/new?distro=coreos) to see
 in which regions a coreos-stable cluster can be set-up (e.g. _not_ in ams1 ATM).
 
+Initially, a Digital Ocean account only allows 5 Droplets, which is not sufficient
+for this experiment. It is possible to increase this limit to 10 on the
+[Digital Ocean profile page](https://cloud.digitalocean.com/settings/profile#).
+
 Run `terraform apply`
 
 In `terraform.tfvars` provide the fingerprint for your public SSH key loaded into DigitalOcean.
