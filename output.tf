@@ -10,9 +10,7 @@ output "master-ip" {
 output "bootstrap-ip" {
   value = "${digitalocean_droplet.dcos_bootstrap.ipv4_address}"
 }
-output "Use this link to access DCOS" {
-  value = "http://${digitalocean_droplet.dcos_master.ipv4_address}/"
-}
+
 output "Use this link to access DCOS" {
   value = "http://${digitalocean_droplet.dcos_master.0.ipv4_address}/"
 }
