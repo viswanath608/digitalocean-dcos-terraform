@@ -11,7 +11,7 @@ resource "digitalocean_droplet" "dcos_bootstrap" {
   connection {
     user = "core"
     private_networking = true
-    private_key = "${var.dcos_ssh_key_path}"
+    private_key = "${file(var.dcos_ssh_key_path)}"
   }
   user_data     = "#cloud-config\n\nssh_authorized_keys:\n  - \"${file("${var.dcos_ssh_public_key_path}")}\"\n"
   region      = "${var.region}"
@@ -66,7 +66,7 @@ resource "digitalocean_droplet" "dcos_master" {
     private_networking = true
   connection {
     user = "core"
-    private_key = "${var.dcos_ssh_key_path}"
+    private_key = "${file(var.dcos_ssh_key_path)}"
   }
   provisioner "local-exec" {
     command = "rm -rf ./do-install.sh"
@@ -98,7 +98,7 @@ resource "digitalocean_droplet" "dcos_agent" {
   ssh_keys = ["${var.ssh_key_fingerprint}"]
   connection {
     user = "core"
-    private_key = "${var.dcos_ssh_key_path}"
+    private_key = "${file(var.dcos_ssh_key_path)}"
   }
   provisioner "local-exec" {
     command = "while [ ! -f ./do-install.sh ]; do sleep 1; done"
@@ -125,7 +125,7 @@ resource "digitalocean_droplet" "dcos_public_agent" {
   ssh_keys = ["${var.ssh_key_fingerprint}"]
   connection {
     user = "core"
-    private_key = "${var.dcos_ssh_key_path}"
+    private_key = "${file(var.dcos_ssh_key_path)}"
   }
   provisioner "local-exec" {
     command = "while [ ! -f ./do-install.sh ]; do sleep 1; done"
