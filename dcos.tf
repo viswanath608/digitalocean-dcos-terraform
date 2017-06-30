@@ -7,10 +7,10 @@ resource "digitalocean_droplet" "dcos_bootstrap" {
   
   image = "coreos-stable"
   size             = "${var.boot_size}"
+    private_networking = true
     ssh_keys = ["${var.ssh_key_fingerprint}"]
   connection {
     user = "core"
-    private_networking = true
     private_key = "${file(var.dcos_ssh_key_path)}"
   }
   user_data     = "#cloud-config\n\nssh_authorized_keys:\n  - \"${file("${var.dcos_ssh_public_key_path}")}\"\n"
